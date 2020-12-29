@@ -1,2 +1,2 @@
-# COVID-19-Tracker-REACTJS
+# Quiz-React
 Created with CodeSandbox
