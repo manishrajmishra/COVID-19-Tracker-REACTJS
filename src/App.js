@@ -3,14 +3,15 @@ import {
   Select,
   FormControl,
   Card,
-  CardContent
+  CardContent,
+  LineGraph
 } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import InfoBox from "./Infobox";
 import Map from "./Map";
 import Table from "./Table";
-import sortData from "./util";
+import { sortData } from "./util";
 
 export default function App() {
   const [countries, setCountries] = useState([]);
@@ -39,9 +40,8 @@ export default function App() {
             name: country.country, //Unitied Kingdom
             value: country.countryInfo.iso2 //UK
           }));
-          const sorteData = sortData(data);
-          setTableData(sorteData);
-          setTableData(data);
+          const sortedData = sortData(data);
+          setTableData(sortedData);
           setCountries(countries);
         });
     };
@@ -115,12 +115,13 @@ export default function App() {
       <Card className="app__right">
         <CardContent>
           <h3>Live Cases</h3>
+          {/* Table */}
           <Table countries={tableData} />
           <h3>WorldWide New Cases</h3>
-          {/* Table */}
+          <LineGraph />
+          {/* Graph */}
         </CardContent>
       </Card>
-      {/* Graph */}
     </div>
   );
 }
