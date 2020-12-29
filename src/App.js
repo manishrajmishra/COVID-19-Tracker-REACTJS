@@ -3,8 +3,7 @@ import {
   Select,
   FormControl,
   Card,
-  CardContent,
-  LineGraph
+  CardContent
 } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
 import "./App.css";
@@ -12,6 +11,7 @@ import InfoBox from "./Infobox";
 import Map from "./Map";
 import Table from "./Table";
 import { sortData } from "./util";
+import LineGraph from "./LineGraph";
 
 export default function App() {
   const [countries, setCountries] = useState([]);
