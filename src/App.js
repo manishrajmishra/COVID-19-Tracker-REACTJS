@@ -4,6 +4,7 @@ import "./App.css";
 
 export default function App() {
   const [countries, setCountries] = useState([]);
+  const [country, setCountry] = useState("worldwide");
   //STATE = How to write a variable in REACT
 
   //https://desease.sh/v3/covid-19/countries
@@ -28,32 +29,33 @@ export default function App() {
   //USEEFFECT = Runs a piece of code based on condition
   //[] means in useeffect = the code inside herer will run once whne the component loads and not again
 
+  const onCountryChange = (event) => {
+    const countryCode = event.target.value;
+    setCountry(countryCode);
+  };
+
   return (
     <div className="App">
+      {/* Header */}
       <div className="app__header">
         <h1>COVID-19 TRACKER</h1>
+        {/* Title + Select input Dropdown Field */}
         <FormControl className="app__dropdown">
-          <Select variant="outlined" value="abc">
+          <Select variant="outlined" onChange={onCountryChange} value={country}>
             {/* Loop through all the countries and show that in dropdown */}
-
+            <MenuItem value="worldwide">WorldWide</MenuItem>
             {countries.map((country) => (
               <MenuItem value={country.value}>{country.name}</MenuItem>
             ))}
-
-            {/* <MenuItem value="worldwide">worldwide1</MenuItem>
-            <MenuItem value="worldwide">worldwide2</MenuItem>
-            <MenuItem value="worldwide">worldwide3</MenuItem>
-            <MenuItem value="worldwide">worldwide4</MenuItem> */}
           </Select>
         </FormControl>
       </div>
 
-      {/* Header */}
-      {/* Title + Select input Dropdown Field */}
-
-      {/* InfoBoxs */}
-      {/* INfoBoxs */}
-      {/* InfoBoxs */}
+      <div className="app__stats">
+        {/* InfoBoxs title="Coronavirus Caes"*/}
+        {/* INfoBoxs title="Coronavirus recoveries"*/}
+        {/* InfoBoxs */}
+      </div>
 
       {/* Table */}
       {/* Graph */}
