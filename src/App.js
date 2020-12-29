@@ -10,6 +10,7 @@ import "./App.css";
 import InfoBox from "./Infobox";
 import Map from "./Map";
 import Table from "./Table";
+import sortData from "./util";
 
 export default function App() {
   const [countries, setCountries] = useState([]);
@@ -38,6 +39,8 @@ export default function App() {
             name: country.country, //Unitied Kingdom
             value: country.countryInfo.iso2 //UK
           }));
+          const sorteData = sortData(data);
+          setTableData(sorteData);
           setTableData(data);
           setCountries(countries);
         });
