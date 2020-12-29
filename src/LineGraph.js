@@ -1,20 +1,48 @@
 import React, { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
-
 function LineGraph() {
   const [data, setData] = useState({});
+
+  const builChartData = (data, casesType = "cases") => {
+    const chartData = [];
+    let lastDataPoint;
+    for (let date in data.cases) {
+      if (lastDataPoint) {
+        const newDataPoint = {
+          x: date,
+          y: (data[casesType][date] = lastDataPoint)
+        };
+        chartData.push(newDataPoint);
+      }
+      lastDataPoint = data["cases"][date];
+    }
+    return chartData;
+  };
 
   useEffect(() => {
     fetch("https://disease.sh/v3/covid-19/historical/all?lastdays=120")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
+        const chartData = builChartData(data, "cases");
+        setData(chartData);
       });
   }, []);
 
   return (
     <div>
-      <Line data options />
+      <h1>In the Graph</h1>
+      <Line
+        data={{
+          datasets: [
+            {
+              backgroundColor: "rgba(204, 16, 52, 0.5)",
+              borderColor: "#CC1034",
+              data: data
+            }
+          ]
+        }}
+      />
     </div>
   );
 }
