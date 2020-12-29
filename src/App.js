@@ -9,13 +9,23 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import InfoBox from "./Infobox";
 import Map from "./Map";
+import Table from "./Table";
 
 export default function App() {
   const [countries, setCountries] = useState([]);
   const [country, setCountry] = useState("worldwide");
+  const [countryInfo, setCountryInfo] = useState({});
+  const [tableData, setTableData] = useState([]);
   //STATE = How to write a variable in REACT
 
   //https://desease.sh/v3/covid-19/countries
+  useEffect(() => {
+    fetch("https://disease.sh/v3/covid-19/all")
+      .then((response) => response.json())
+      .then((data) => {
+        setCountryInfo(data);
+      });
+  }, []);
 
   useEffect(() => {
     //async -> send a request, wait for it do something with the data until is comes back
@@ -28,7 +38,7 @@ export default function App() {
             name: country.country, //Unitied Kingdom
             value: country.countryInfo.iso2 //UK
           }));
-
+          setTableData(data);
           setCountries(countries);
         });
     };
@@ -37,9 +47,21 @@ export default function App() {
   //USEEFFECT = Runs a piece of code based on condition
   //[] means in useeffect = the code inside herer will run once whne the component loads and not again
 
-  const onCountryChange = (event) => {
+  const onCountryChange = async (event) => {
     const countryCode = event.target.value;
-    setCountry(countryCode);
+
+    const url =
+      countryCode === "worldwide"
+        ? "https://disease.sh/v3/covid-19/all"
+        : `https://disease.sh/v3/covid-19/countries/${countryCode}`;
+
+    await fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        setCountry(countryCode);
+        //All the data of the country from countrycode response
+        setCountryInfo(data);
+      });
   };
 
   return (
@@ -65,11 +87,23 @@ export default function App() {
         </div>
 
         <div className="app__stats">
-          <InfoBox title="Coronavirus Cases" cases={130} total={20000} />
+          <InfoBox
+            title="Coronavirus Cases"
+            cases={countryInfo.todayCases}
+            total={countryInfo.cases}
+          />
 
-          <InfoBox title="Recoveries" cases={623} total={3000} />
+          <InfoBox
+            title="Recoveries"
+            cases={countryInfo.todayRecovered}
+            total={countryInfo.recovered}
+          />
 
-          <InfoBox title="Deaths" cases={1234} total={400} />
+          <InfoBox
+            title="Deaths"
+            cases={countryInfo.todayDeaths}
+            total={countryInfo.deaths}
+          />
         </div>
         {/* Map */}
         <Map />
@@ -78,6 +112,7 @@ export default function App() {
       <Card className="app__right">
         <CardContent>
           <h3>Live Cases</h3>
+          <Table countries={tableData} />
           <h3>WorldWide New Cases</h3>
           {/* Table */}
         </CardContent>
